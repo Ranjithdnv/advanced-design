@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0px;
+}
+:root {
+  max-width: full;
+  margin: 0 auto;
+  padding: 0 !important;
+  text-align: center;
+}
+html body #root {
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 0px !important;
+  text-align: center;
+}
