@@ -297,15 +297,6 @@ const dummyDoctorOptions = {
   // Other surgery types...
 };
 
-const formDataothers = {
-  age: 1,
-  appointmentDate: "10-10-2026", // Likely from DatePicker, using dayjs/Moment
-  contactNumber: "1",
-  doctorSpecialization: "cardiologist",
-  emergencyContact: "1",
-  insuranceProvider: "kaiser_permanente",
-  patientName: "1",
-};
 const formData = {
   daten: "",
   date: null,
@@ -406,6 +397,7 @@ const handleSubmit = (formData) => {
 import { Button } from "antd";
 import ReusableFormList from "./antformlist/childlistt";
 import ChildGutter from "./antgutter/childgutter";
+import ReusableFormListH from "./antformlist/formhook";
 
 const Cons = () => {
   const [form] = Form.useForm();
@@ -1152,7 +1144,7 @@ const Cons = () => {
             onFinish={handleFinish}
             initialValues={initialValues}
           />
-          <ReusableFormList
+          {/* <ReusableFormList
             form={form} //
             formFields={formFields2}
             deder={formData}
@@ -1160,16 +1152,17 @@ const Cons = () => {
             optionsData={optionsData}
             listName="surgeries2"
             onSubmit={handleSubmit} // Pass submit handler
-          />{" "}
+          />{" "} */}
           <ReusableFormList
             form={form} //
-            deder={formDataothers}
+            // deder={formDataothers}
             formFields={formFields4}
             handleDependencyChange={handleDependencyChange}
             optionsData={optionsData}
             listName="other"
             onSubmit={handleSubmit} // Pass submit handler
           />
+
           <Form
             form={form}
             initialValues={initialValues}

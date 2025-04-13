@@ -59,6 +59,27 @@ const ReusableFormList = ({
     // Invalid for anything else (e.g., null, undefined, numbers, etc.)
     return true;
   };
+  const handleFieldChange = (fieldName, index, value) => {
+    // Optionally update something or log
+    console.log(`Changed ${fieldName} at index ${index} to`, value);
+
+    // Validate the specific field in the list
+    form.validateFields();
+    form.validateFields([[listName, index, fieldName]]).catch((err) => {
+      // You can log or handle the validation errors if needed
+      console.warn(
+        `Validation error in [${listName}][${index}][${fieldName}]`,
+        err
+      );
+    });
+
+    // Example logic for conditional updates
+    if (fieldName === "surgeryType") {
+      form.setFieldValue([listName, index, "suggestedDoctor"], undefined);
+    }
+
+    // Add more conditional logic if needed
+  };
 
   const validateAndAdd = async (add, fields, listName) => {
     if (fields.length === 0) {
@@ -267,6 +288,13 @@ const ReusableFormList = ({
                                 <Input
                                   className="custom-rounded"
                                   placeholder={`Enter ${field.label}`}
+                                  onChange={(e) => {
+                                    handleFieldChange(
+                                      field.name,
+                                      name,
+                                      e.target.value
+                                    ); // ✅ correct usage
+                                  }}
                                   disabled={isDisabled}
                                 />
                               )}
@@ -275,6 +303,9 @@ const ReusableFormList = ({
                                   className="custom-rounded !shadow-lg"
                                   placeholder={`Enter ${field.label}`}
                                   disabled={isDisabled}
+                                  onChange={(value) => {
+                                    handleFieldChange(field.name, name, value);
+                                  }}
                                 />
                               )}
                               {field.type === "select" && (
@@ -285,14 +316,15 @@ const ReusableFormList = ({
                                     width: "100%",
                                   }}
                                   placeholder={`Select ${field.label}`}
-                                  onChange={(value) =>
+                                  onChange={(value) => {
+                                    handleFieldChange(field.name, name, value); // ✅ value is direct
                                     handleDependencyChange(
                                       listName,
                                       name,
                                       field.name,
                                       value
-                                    )
-                                  }
+                                    ); // ✅ value is direct
+                                  }}
                                   disabled={isDisabled}
                                 >
                                   {(
@@ -312,7 +344,13 @@ const ReusableFormList = ({
                               {field.type === "date" && (
                                 <DatePicker
                                   className="custom-rounded  shadow-lg"
-                                  disabled={isDisabled}
+                                  onChange={(date, dateString) => {
+                                    handleFieldChange(
+                                      field.name,
+                                      name,
+                                      dateString
+                                    ); // or `date` if you prefer Moment object
+                                  }}
                                 />
                               )}
                             </Form.Item>
