@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import "../index.css";
 import {
@@ -297,6 +297,15 @@ const dummyDoctorOptions = {
   // Other surgery types...
 };
 
+const formDataothers = {
+  age: "",
+  appointmentDate: null, // Likely from DatePicker, using dayjs/Moment
+  contactNumber: "",
+  doctorSpecialization: null,
+  emergencyContact: "",
+  insuranceProvider: null,
+  patientName: "",
+};
 const formData = {
   daten: "",
   date: null,
@@ -398,19 +407,23 @@ import { Button } from "antd";
 import ReusableFormList from "./antformlist/childlistt";
 import ChildGutter from "./antgutter/childgutter";
 import ReusableFormListH from "./antformlist/formhook";
+import { useSnackbar } from "notistack";
 
 const Cons = () => {
   const [form] = Form.useForm();
   const [searchTerm, setSearchTerm] = useState("");
   const [openSection, setOpenSection] = useState(null);
 
+  const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState(["Test 1"]); // Default item
   const [inputValues, setInputValues] = useState({}); // Track input values
 
+  const formListRef = useRef();
   const onFinish = (values) => {
     console.log("Form Values:", values);
   };
   const handleSubmit = (formData) => {
+    formListRef.current?.removeLastIfDefault();
     console.log("Submitted Data:", formData);
     // if (form?.getFieldsValue) {
     //   const currentValues = form.getFieldsValue();
@@ -1155,8 +1168,9 @@ const Cons = () => {
           />{" "} */}
           <ReusableFormList
             form={form} //
-            // deder={formDataothers}
+            deder={formDataothers}
             formFields={formFields4}
+            ref={formListRef}
             handleDependencyChange={handleDependencyChange}
             optionsData={optionsData}
             listName="other"
@@ -1169,6 +1183,9 @@ const Cons = () => {
             onFinish={handleSubmit}
             onFinishFailed={(errorInfo) => {
               console.error("Form validation failed:", errorInfo);
+              enqueueSnackbar(`Please enter ${"all feilds"}`, {
+                variant: "warning",
+              });
               //message.error("Please correct the errors before submitting.");
             }}
           >
